@@ -48,7 +48,7 @@ section{position:relative;z-index:1;padding:clamp(40px,8vw,80px) clamp(16px,5vw,
 #envelope-scene.opened{cursor:default}
 #envelope-wrap{position:absolute;bottom:0;left:0;right:0;height:clamp(200px,48vw,290px);filter:drop-shadow(0 12px 36px rgba(182,100,255,.35));transition:filter .4s ease}
 #envelope-scene:not(.opened):hover #envelope-wrap{filter:drop-shadow(0 18px 52px rgba(182,100,255,.55))}
-.env-body{position:absolute;bottom:0;left:0;right:0;height:90%;background:linear-gradient(155deg,#FFAAD6 0%,#D97EFF 100%);border-radius:8px 8px 20px 20px}
+.env-body{position:absolute;bottom:0;left:0;right:0;height:100%;background:linear-gradient(155deg,#FFAAD6 0%,#D97EFF 100%);border-radius:8px 8px 20px 20px}
 .env-body::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52%;background:linear-gradient(175deg,#E880FF 0%,#C266F5 100%);clip-path:polygon(0 55%,50% 0%,100% 55%,100% 100%,0 100%);border-radius:0 0 20px 20px}
 .env-left,.env-right{position:absolute;bottom:8%;width:0;height:0;border-style:solid;pointer-events:none}
 .env-left{left:0;border-width:0 0 clamp(90px,20vw,130px) clamp(130px,36vw,190px);border-color:transparent transparent #CC6AEE transparent;opacity:.6}
@@ -63,7 +63,7 @@ section{position:relative;z-index:1;padding:clamp(40px,8vw,80px) clamp(16px,5vw,
    ============================================================ */
 .env-flap {
   position: absolute;
-  top: -1px; /* 👈 removes tiny seam gap */
+  top: 0px; /* 👈 removes tiny seam gap */
   left: 0;
   right: 0;
   height: clamp(82px, 19vw, 114px);
