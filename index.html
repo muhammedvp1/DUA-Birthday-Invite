@@ -43,84 +43,107 @@ section{position:relative;z-index:1;padding:clamp(40px,8vw,80px) clamp(16px,5vw,
 .hero-hint{font-family:var(--font-display);font-size:clamp(1.1rem,3.5vw,1.6rem);color:var(--purple);animation:bounce-hint 1.8s ease-in-out infinite}
 @keyframes bounce-hint{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-/* ENVELOPE SCENE */
-#envelope-scene{position:relative;width:clamp(260px,72vw,380px);height:calc(clamp(200px,48vw,290px) + clamp(140px,28vw,180px));cursor:pointer}
-#envelope-scene.opened{cursor:default}
-#envelope-wrap{position:absolute;bottom:0;left:0;right:0;height:clamp(200px,48vw,290px);filter:drop-shadow(0 12px 36px rgba(182,100,255,.35));transition:filter .4s ease}
-#envelope-scene:not(.opened):hover #envelope-wrap{filter:drop-shadow(0 18px 52px rgba(182,100,255,.55))}
-.env-body{position:absolute;bottom:0;left:0;right:0;height:90%;background:linear-gradient(155deg,#FFAAD6 0%,#D97EFF 100%);border-radius:8px 8px 20px 20px}
-.env-body::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52%;background:linear-gradient(175deg,#E880FF 0%,#C266F5 100%);clip-path:polygon(0 55%,50% 0%,100% 55%,100% 100%,0 100%);border-radius:0 0 20px 20px}
-.env-left,.env-right{position:absolute;bottom:8%;width:0;height:0;border-style:solid;pointer-events:none}
-.env-left{left:0;border-width:0 0 clamp(90px,20vw,130px) clamp(130px,36vw,190px);border-color:transparent transparent #CC6AEE transparent;opacity:.6}
-.env-right{right:0;border-width:0 clamp(130px,36vw,190px) clamp(90px,20vw,130px) 0;border-color:transparent #CC6AEE transparent transparent;opacity:.6}
-.env-click-hint{position:absolute;inset:0;border-radius:8px 8px 20px 20px;pointer-events:none}
-.env-click-hint::after{content:'';position:absolute;inset:0;border-radius:8px 8px 20px 20px;background:radial-gradient(circle at center,rgba(255,255,255,.28) 0%,transparent 70%);opacity:0;animation:pulse-glow 2s ease-in-out infinite}
-#envelope-scene.opened .env-click-hint::after{animation:none;opacity:0}
-@keyframes pulse-glow{0%,100%{opacity:0;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
-
-/* ============================================================
-   FLAP — clip-path triangle, always perfectly flush with envelope
-   ============================================================ */
-.env-flap {
-  position: absolute;
-  top: -3px; /* 👈 removes tiny seam gap */
-  left: 0;
-  right: 0;
-  height: clamp(82px, 19vw, 114px);
-
-  transform-origin: top center;
-  transform-style: preserve-3d;
-
-  backface-visibility: hidden; /* 🔥 prevents flicker */
-  -webkit-backface-visibility: hidden;
-
-  z-index: 20;
-
-  transition: transform 1s cubic-bezier(.22,.61,.36,1);
+/* ── NEW ENVELOPE (from second file) ── */
+#envelope {
+  position: relative;
+  height: 180px;
+  width: 280px;
+  border-radius: 6px;
+  background-color: #ffafcc;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  cursor: pointer;
+  overflow: visible;
 }
 
-/* flap shape */
-.env-flap::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(160deg, #FFAAD6 0%, #FF8FD9 60%, #EE7ACC 100%);
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
+#envelope.jiggle {
+  animation: jiggle 0.5s ease-in-out 3;
 }
 
-/* OPEN STATE */
-#envelope-scene.opened .env-flap {
-  transform: rotateX(-180deg);}
+@keyframes jiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25%       { transform: rotate(-5deg); }
+  75%       { transform: rotate(5deg); }
+}
 
-.env-seal{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);font-size:clamp(1.8rem,5vw,2.8rem);z-index:12;transition:opacity .3s ease .05s,transform .3s cubic-bezier(.55,0,1,.45) .05s;pointer-events:none}
-#envelope-scene.opened .env-seal{opacity:0;transform:translate(-50%,-50%) scale(0)}
+.front { position: absolute; width: 0; height: 0; z-index: 3; }
 
-/* LETTER */
-#letter{position:absolute;left:2%;right:2%;bottom:clamp(175px,44vw,258px);border-radius:24px;padding:clamp(20px,4.5vw,32px) clamp(18px,4vw,28px) clamp(18px,4vw,26px);box-shadow:0 0 0 3px rgba(255,107,174,.15),0 8px 32px rgba(182,100,255,.28),0 24px 56px rgba(182,100,255,.18),0 2px 8px rgba(0,0,0,.06);text-align:center;z-index:20;pointer-events:none;background:linear-gradient(160deg,#FFFAFF 0%,#FFF4FB 60%,#F8F0FF 100%);opacity:0;transform:translateY(clamp(95px,22vw,135px)) scale(0.82);transition:transform .95s cubic-bezier(.22,1.5,.36,1) .72s,opacity .55s ease .68s}
-#letter::before{content:'';display:block;height:7px;background:repeating-linear-gradient(90deg,var(--pink) 0 22px,var(--purple) 22px 44px,var(--yellow) 44px 66px,var(--mint) 66px 88px);border-radius:4px;margin-bottom:14px}
-#letter::after{content:'';display:block;height:5px;background:repeating-linear-gradient(90deg,var(--mint) 0 20px,var(--yellow) 20px 40px,var(--purple) 40px 60px,var(--pink) 60px 80px);border-radius:3px;margin-top:16px;opacity:.7}
+.flap {
+  border-top: 98px solid #ffb6d9;
+  border-left: 140px solid transparent;
+  border-right: 140px solid transparent;
+  border-bottom: 82px solid transparent;
+  transform-origin: top;
+  z-index: 5;
+  transition: transform 0.4s ease;
+}
+
+.pocket {
+  border-left: 140px solid #ffd1e3;
+  border-right: 140px solid #ffd1e3;
+  border-bottom: 90px solid #ffe6f0;
+  border-top: 90px solid transparent;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+/* Letter inside the new envelope */
+#envelope .letter {
+  position: absolute;
+  background: linear-gradient(160deg, #FFFAFF 0%, #FFF4FB 60%, #F8F0FF 100%);
+  width: 90%;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0px);
+  border-radius: 10px;
+  box-shadow: 0 2px 26px rgba(0,0,0,.12);
+  z-index: 1;
+  padding: 20px 16px;
+  text-align: center;
+  opacity: 0;
+  transition: transform 0.55s cubic-bezier(.34,1.56,.64,1), opacity 0.4s ease;
+}
+
+#envelope .letter::before {
+  content:'';
+  display:block;
+  height:7px;
+  background:repeating-linear-gradient(90deg,var(--pink) 0 22px,var(--purple) 22px 44px,var(--yellow) 44px 66px,var(--mint) 66px 88px);
+  border-radius:4px;
+  margin-bottom:14px;
+}
+
+#envelope .letter::after {
+  content:'';
+  display:block;
+  height:5px;
+  background:repeating-linear-gradient(90deg,var(--mint) 0 20px,var(--yellow) 20px 40px,var(--purple) 40px 60px,var(--pink) 60px 80px);
+  border-radius:3px;
+  margin-top:16px;
+  opacity:.7;
+}
+
 .letter-emoji{font-size:clamp(2rem,6vw,3rem);line-height:1;display:block;margin-bottom:8px;filter:drop-shadow(0 3px 6px rgba(255,80,150,.25))}
 .letter-heading{font-family:var(--font-display);font-size:clamp(1.05rem,3.5vw,1.55rem);color:var(--hot-pink);line-height:1.25;margin-bottom:6px}
 .letter-name{display:block;font-family:var(--font-display);font-size:clamp(1.5rem,5.5vw,2.2rem);background:linear-gradient(135deg,var(--hot-pink) 0%,var(--deep-purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.15;margin:4px 0 6px}
 .letter-sub{font-family:var(--font-body);font-weight:800;font-size:clamp(.82rem,2.5vw,1rem);color:var(--text-soft);line-height:1.4}
-#envelope-scene.opened #letter{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+
+/* Open state */
+#envelope.open .flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+#envelope.open .letter {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-130px);
+  z-index: 6;
+  pointer-events: auto;
+}
+
+/* ── END NEW ENVELOPE ── */
+
 .tap-label{font-family:var(--font-body);font-weight:800;font-size:clamp(.88rem,2.5vw,1.05rem);color:var(--text-soft);display:flex;align-items:center;gap:8px;justify-content:center;transition:opacity .5s ease}
 .tap-arrow{font-size:1.4rem;animation:bounce-hint 1.4s ease infinite}
-
-/* WELCOME */
-#welcome-section{background:linear-gradient(160deg,#FFF0FB 0%,#F3E8FF 100%);text-align:center}
-.welcome-box{background:white;border-radius:var(--radius-lg);padding:clamp(28px,6vw,56px) clamp(20px,5vw,48px);box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
-.welcome-box::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(255,107,174,.15) 0%,transparent 70%);pointer-events:none}
-#typing-line-1{font-family:var(--font-display);font-size:clamp(1.4rem,5vw,2.6rem);color:var(--hot-pink);min-height:1.4em;line-height:1.3}
-#typing-line-2{font-family:var(--font-body);font-weight:800;font-size:clamp(.92rem,3vw,1.4rem);color:var(--text-soft);margin-top:14px;opacity:0;transform:translateY(12px);transition:opacity .8s ease,transform .8s ease}
-#typing-line-2.show{opacity:1;transform:translateY(0)}
-.cursor{display:inline-block;width:3px;height:1.1em;background:var(--pink);margin-left:3px;vertical-align:middle;border-radius:2px;animation:blink .65s step-end infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.star-row{display:flex;justify-content:center;gap:12px;margin-top:20px}
-.star-row span{font-size:1.5rem;display:inline-block;animation:spin-slow 4s linear infinite}
-.star-row span:nth-child(2){animation-delay:.7s;animation-direction:reverse}
-.star-row span:nth-child(3){animation-delay:1.4s}
-@keyframes spin-slow{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
 
 /* CAKE */
 #cake-section{text-align:center;background:linear-gradient(170deg,#FEF3FF 0%,#FFF8EC 100%)}
@@ -215,9 +238,12 @@ section{position:relative;z-index:1;padding:clamp(40px,8vw,80px) clamp(16px,5vw,
 .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s cubic-bezier(.34,1.2,.64,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
-@media(max-width:420px){
-  #envelope-scene{width:90vw}
-  #layer-3{width:80vw}#layer-2{width:62vw}#layer-1{width:42vw}
+/* Mobile */
+@media(max-width:480px){
+  #envelope{width:90vw;height:auto}
+  .flap{border-top-width:40vw;border-left-width:45vw;border-right-width:45vw;border-bottom-width:15vw}
+  .pocket{border-left-width:45vw;border-right-width:45vw;border-bottom-width:40vw;border-top-width:20vw}
+  #envelope.open .letter{transform:translateX(-50%) translateY(-100px);width:88vw;max-height:65vh;overflow-y:auto}
   .cards-grid{grid-template-columns:1fr}
   .cd-box{min-width:60px;padding:12px 12px 10px}
   .rsvp-btns{flex-direction:column}
@@ -233,32 +259,20 @@ section{position:relative;z-index:1;padding:clamp(40px,8vw,80px) clamp(16px,5vw,
 
 <section id="hero">
   <p class="hero-hint">You've got a special message! 💌</p>
-  <div id="envelope-scene" role="button" aria-label="Open invitation" tabindex="0">
-    <div id="letter">
+
+  <!-- NEW ENVELOPE -->
+  <div id="envelope" class="close" role="button" aria-label="Open invitation" tabindex="0">
+    <div class="front flap"></div>
+    <div class="front pocket"></div>
+    <div class="letter" id="letter">
       <div class="letter-emoji">🎉</div>
       <div class="letter-heading">You're invited to</div>
       <span class="letter-name" id="letter-name"></span>
       <div class="letter-sub"><span id="letter-age"></span>th Birthday Party! 🎂<br><span style="opacity:.75;">A day of fun, laughter &amp; cake!</span></div>
     </div>
-    <div id="envelope-wrap">
-      <div class="env-left"></div>
-      <div class="env-right"></div>
-      <div class="env-body"><div class="env-click-hint"></div></div>
-      <div class="env-flap"></div>
-      <div class="env-seal">💝</div>
-    </div>
   </div>
-  <p class="tap-label" id="tap-label"><span class="tap-arrow">👆</span> Tap the envelope to open!</p>
-</section>
 
-<section id="welcome-section" class="reveal">
-  <div class="container">
-    <div class="welcome-box">
-      <div id="typing-line-1"><span class="cursor"></span></div>
-      <div id="typing-line-2">Join us for a day full of fun, laughter, and cake! 🎂</div>
-      <div class="star-row"><span>⭐</span><span>🌟</span><span>✨</span><span>🌟</span><span>⭐</span></div>
-    </div>
-  </div>
+  <p class="tap-label" id="tap-label"><span class="tap-arrow">👆</span> Tap the envelope to open!</p>
 </section>
 
 <section id="cake-section" class="reveal">
@@ -346,7 +360,6 @@ section{position:relative;z-index:1;padding:clamp(40px,8vw,80px) clamp(16px,5vw,
     <div class="balloons-row">
       <span class="balloon">🎈</span><span class="balloon">🎀</span><span class="balloon">🎈</span><span class="balloon">🎊</span><span class="balloon">🎈</span>
     </div>
-    <div><div class="rsvp-strip"><span>📬</span> RSVP by: <strong id="rsvp-strip-date"></strong></div></div>
   </div>
 </section>
 
@@ -357,7 +370,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('detail-date').textContent=PARTY.date;
   document.getElementById('detail-time').textContent=PARTY.time;
   document.getElementById('detail-location').textContent=PARTY.location;
-  document.getElementById('rsvp-strip-date').textContent=PARTY.rsvpBy;
   initFloaties();initConfettiCanvas();initEnvelope();initCake();initDetailCards();initRSVP();initPhotos();initCountdown();initScrollReveal();initSound();
 });
 
@@ -383,20 +395,30 @@ function animC(){
   craf=requestAnimationFrame(animC);
 }
 
+/* ── UPDATED initEnvelope using the new envelope markup ── */
 function initEnvelope(){
-  const scene=document.getElementById('envelope-scene'),tap=document.getElementById('tap-label');let o=false;
-  function open(){if(o)return;o=true;scene.classList.add('opened');scene.removeAttribute('tabindex');tap.style.transition='opacity .5s ease';tap.style.opacity='0';playSound('pop');const r=scene.getBoundingClientRect();setTimeout(()=>launchConfetti(r.left+r.width/2,r.top+r.height*.65,150),700)}
-  scene.addEventListener('click',open);scene.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+  const envelope=document.getElementById('envelope');
+  const tap=document.getElementById('tap-label');
+  let opened=false;
+
+  function open(){
+    if(opened)return;
+    opened=true;
+    envelope.classList.remove('close');
+    envelope.classList.add('open');
+    tap.style.transition='opacity .5s ease';
+    tap.style.opacity='0';
+    playSound('pop');
+    const r=envelope.getBoundingClientRect();
+    setTimeout(()=>launchConfetti(r.left+r.width/2,r.top+r.height*.65,150),700);
+  }
+
+  envelope.addEventListener('click',open);
+  envelope.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
 }
 
-let ts=false;
-function startTyping(){
-  if(ts)return;ts=true;
-  const l1=document.getElementById('typing-line-1'),l2=document.getElementById('typing-line-2');
-  let cur=l1.querySelector('.cursor');if(!cur){cur=document.createElement('span');cur.className='cursor'}
-  const t=`You're invited to ${PARTY.name}'s ${PARTY.age}th Birthday Party! 🎉`;let idx=0;
-  l1.textContent='';l1.appendChild(cur);
-  const iv=setInterval(()=>{l1.insertBefore(document.createTextNode(t[idx]),cur);idx++;if(idx>=t.length){clearInterval(iv);cur.style.animation='none';cur.style.opacity='0';setTimeout(()=>l2.classList.add('show'),500)}},52);
+function initScrollReveal(){
+  window.addEventListener('scroll',checkReveal,{passive:true});checkReveal();
 }
 
 function initCake(){
@@ -441,12 +463,6 @@ function initCountdown(){
 }
 
 function checkReveal(){document.querySelectorAll('.reveal').forEach(e=>{if(e.getBoundingClientRect().top<window.innerHeight*.9)e.classList.add('visible')})}
-
-function initScrollReveal(){
-  const o=new IntersectionObserver(e=>{if(e[0].isIntersecting){startTyping();o.disconnect()}},{threshold:.25});
-  o.observe(document.getElementById('welcome-section'));
-  window.addEventListener('scroll',checkReveal,{passive:true});checkReveal();
-}
 
 let se=false,ac=null;
 function initSound(){document.getElementById('sound-btn').addEventListener('click',()=>{se=!se;document.getElementById('sound-btn').textContent=se?'🔊':'🔇';if(se&&!ac)ac=new(window.AudioContext||window.webkitAudioContext)()})}
