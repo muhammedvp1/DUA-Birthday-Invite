@@ -256,7 +256,8 @@ section{position:relative;z-index:1;padding:clamp(40px,8vw,80px) clamp(16px,5vw,
 <canvas id="confetti-canvas"></canvas>
 <button id="sound-btn" title="Toggle music & sound">🔊</button>
 <audio id="bgMusic" loop>
-<source src="music.mp3" type="audio/mpeg"></audio>
+  <source src="https://cdn.pixabay.com/audio/2022/10/18/audio_b166e6bcf2.mp3" type="audio/mpeg">
+</audio>
 <div id="floaties-container"></div>
 
 <section id="hero">
@@ -470,11 +471,13 @@ let se=true,ac=null;
 const bgMusic=document.getElementById('bgMusic');
 bgMusic.volume=0.35;
 
-// Start music on first user interaction (browser autoplay policy)
+// Start BOTH music and sound effects on first user interaction
 let musicStarted=false;
 function tryStartMusic(){
   if(musicStarted)return;
   musicStarted=true;
+  if(!ac) ac=new(window.AudioContext||window.webkitAudioContext)();
+  if(ac.state==='suspended') ac.resume();
   bgMusic.play().catch(()=>{});
 }
 document.addEventListener('click',tryStartMusic,{once:true});
@@ -482,7 +485,6 @@ document.addEventListener('touchend',tryStartMusic,{once:true});
 
 function initSound(){
   const btn=document.getElementById('sound-btn');
-  // Sound is ON by default — show muted state icon initially
   btn.textContent='🔊';
   btn.addEventListener('click',()=>{
     se=!se;
@@ -494,7 +496,6 @@ function initSound(){
       btn.textContent='🔇';
       bgMusic.muted=true;
     }
-    if(se&&!ac) ac=new(window.AudioContext||window.webkitAudioContext)();
   });
 }
 function playSound(t){if(!se||!ac)return;try{const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);const n=ac.currentTime;if(t==='pop'){o.type='sine';o.frequency.setValueAtTime(620,n);o.frequency.exponentialRampToValueAtTime(200,n+.15);g.gain.setValueAtTime(.28,n);g.gain.exponentialRampToValueAtTime(.001,n+.2);o.start(n);o.stop(n+.2)}else if(t==='soft'){o.type='sine';o.frequency.setValueAtTime(440,n);o.frequency.exponentialRampToValueAtTime(880,n+.12);g.gain.setValueAtTime(.14,n);g.gain.exponentialRampToValueAtTime(.001,n+.2);o.start(n);o.stop(n+.2)}else if(t==='whoosh'){o.type='sawtooth';o.frequency.setValueAtTime(320,n);o.frequency.exponentialRampToValueAtTime(70,n+.3);g.gain.setValueAtTime(.1,n);g.gain.exponentialRampToValueAtTime(.001,n+.35);o.start(n);o.stop(n+.35)}}catch(e){}}
