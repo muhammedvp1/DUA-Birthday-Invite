@@ -13,7 +13,7 @@
     age:       8,
     date:      "Saturday, 25th April 2026",
     time:      "2:00 PM – 5:00 PM",
-    location:  "Sunflower Hall, 42 Rainbow Lane, London",
+    location:  "272 Sherrard Rd, E12 6UF, London",
     theme:     "Unicorn & Rainbows 🦄",
     partyDate: new Date(2026, 3, 25, 14, 0, 0),
     rsvpBy:    "1st April 2025",
@@ -213,17 +213,6 @@ section{position:relative;z-index:1;padding:clamp(40px,8vw,80px) clamp(16px,5vw,
 @keyframes pop-in{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 .success-bubble{background:linear-gradient(135deg,#FFAAD6 0%,#D97EFF 100%);border-radius:20px;padding:20px 24px;color:white;font-family:var(--font-display);font-size:clamp(1rem,3.5vw,1.35rem);line-height:1.45;box-shadow:0 8px 28px rgba(182,100,255,.3)}
 
-/* PHOTOS */
-#photos-section{background:linear-gradient(170deg,#FFF8EC 0%,#F3E8FF 100%)}
-.polaroids-wrap{display:flex;gap:20px;overflow-x:auto;padding:28px 16px 36px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.polaroids-wrap::-webkit-scrollbar{display:none}
-.polaroid{flex-shrink:0;width:clamp(160px,42vw,215px);background:white;border-radius:6px;padding:12px 12px 36px;box-shadow:0 8px 32px rgba(100,50,150,.18);scroll-snap-align:center;position:relative;transition:transform .4s cubic-bezier(.34,1.28,.64,1),box-shadow .3s}
-.polaroid:nth-child(1){transform:rotate(-4deg)}.polaroid:nth-child(2){transform:rotate(2.5deg)}.polaroid:nth-child(3){transform:rotate(-2deg)}.polaroid:nth-child(4){transform:rotate(3.5deg)}.polaroid:nth-child(5){transform:rotate(-3deg)}
-.polaroid:hover{transform:rotate(0deg) scale(1.07) translateY(-6px) !important;box-shadow:0 18px 50px rgba(100,50,150,.28);z-index:10}
-.polaroid-img{width:100%;aspect-ratio:1;border-radius:3px;display:block;overflow:hidden}
-.polaroid-img svg{width:100%;height:100%;display:block}
-.polaroid-caption{text-align:center;font-family:var(--font-display);font-size:clamp(.68rem,2.2vw,.86rem);color:var(--text-soft);position:absolute;bottom:9px;left:0;right:0}
-
 /* ENDING */
 #ending-section{text-align:center;background:linear-gradient(150deg,#F3E8FF 0%,#FFF4FB 60%,#FFF8EC 100%);padding-bottom:clamp(60px,12vw,120px);overflow:hidden}
 .ending-msg{font-family:var(--font-display);font-size:clamp(1.8rem,6vw,3.2rem);color:var(--hot-pink);line-height:1.25;text-shadow:0 4px 16px rgba(255,45,120,.2);animation:pulse-scale 2.5s ease-in-out infinite}
@@ -349,14 +338,6 @@ section{position:relative;z-index:1;padding:clamp(40px,8vw,80px) clamp(16px,5vw,
   </div>
 </section>
 
-<section id="photos-section" class="reveal">
-  <div class="container">
-    <h2 class="section-title">Memories 📸</h2>
-    <p class="section-sub">Swipe to see our favourite moments!</p>
-  </div>
-  <div class="polaroids-wrap" id="polaroids"></div>
-</section>
-
 <section id="ending-section" class="reveal">
   <div class="container">
     <p class="ending-msg">We can't wait to<br>celebrate with you! 🎈</p>
@@ -373,7 +354,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('detail-date').textContent=PARTY.date;
   document.getElementById('detail-time').textContent=PARTY.time;
   document.getElementById('detail-location').textContent=PARTY.location;
-  initFloaties();initConfettiCanvas();initEnvelope();initCake();initDetailCards();initRSVP();initPhotos();initCountdown();initScrollReveal();initSound();
+  initFloaties();initConfettiCanvas();initEnvelope();initCake();initDetailCards();initRSVP();initCountdown();initScrollReveal();initSound();
 });
 
 function initFloaties(){
@@ -452,12 +433,6 @@ function initRSVP(){
     sd.classList.add('show');
   }
   by.addEventListener('click',()=>sub(true));bn.addEventListener('click',()=>sub(false));
-}
-
-function initPhotos(){
-  const photos=[{label:'Birthday Girl ✨',bg:['#FFD6F5','#D6C5FF'],emoji:'👑',sz:56},{label:'Best Friends 💕',bg:['#C5F0FF','#D6F5C5'],emoji:'🌸',sz:52},{label:'Party Fun! 🎊',bg:['#FFF3C5','#FFD6C5'],emoji:'🎈',sz:56},{label:'Cake Time 🎂',bg:['#D6C5FF','#FFD6F5'],emoji:'🎂',sz:52},{label:'Magical Day 🦄',bg:['#C5FFE8','#C5E8FF'],emoji:'🦄',sz:50}];
-  const w=document.getElementById('polaroids');
-  photos.forEach((p,i)=>{const g=`pg${i}`;const d=document.createElement('div');d.className='polaroid';d.innerHTML=`<div class="polaroid-img"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="${g}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${p.bg[0]}"/><stop offset="100%" stop-color="${p.bg[1]}"/></linearGradient></defs><rect width="200" height="200" fill="url(#${g})"/><circle cx="170" cy="30" r="22" fill="rgba(255,255,255,.22)"/><circle cx="30" cy="170" r="18" fill="rgba(255,255,255,.18)"/><text x="100" y="115" font-size="${p.sz}" text-anchor="middle" dominant-baseline="middle" font-family="Apple Color Emoji,Segoe UI Emoji,sans-serif">${p.emoji}</text></svg></div><div class="polaroid-caption">${p.label}</div>`;w.appendChild(d)});
 }
 
 function initCountdown(){
